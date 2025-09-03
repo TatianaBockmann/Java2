@@ -1,0 +1,237 @@
+PrimeiroForm20251
+
+Aula2_0808
+NetBeans
+Novo projeto → Categorias: Java Web; Projetos: Aplicação Web; Servidor: GlassFisch Server 4.1.1; Frameworks: Sem.
+Páginas Web tem q ter: form.html (renomeado de index para form, refatorar)
+WEB-INF: glassfish-web.xml; web.xml 
+Se WEB-INF não tiver glassfish-web.xml; clicar com botão direito → Novo → Descritor do GlassFish.
+
+form.html → adicionar bootstrap abixo dos meta ( <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+O que é o web.xml?
+O web.xml é o arquivo de configuração da aplicação web em projetos Java com Servlets, JSP ou frameworks mais antigos. Ele fica dentro da pasta:
+<projeto>/web/WEB-INF/web.xml
+A pasta Páginas Web no NetBeans corresponde à pasta /web do projeto.
+________________________________________
+📌 Passo a passo para adicionar o web.xml no NetBeans 8.2
+1.	Clique com o botão direito no projeto → Propriedades
+2.	Vá em "Frameworks" (do lado esquerdo) Outros
+3.	Clique na aba "Configurando" (ou "Configuration")
+4.	Marque a opção "Usar descritor de implantação Padrão (web.xml)"
+5.	Clique em OK
+OU
+Páginas WEB-INF → Novo → Descritor web.xml.
+Pacotes de Códigos-fonte → novo pacote (br.com.liberato) → Classes Dados, Gravar e Listar;
+
+package br.com.liberato;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Tati
+ */
+public class Dados {
+    private String nome;
+    private String sobreNome;
+    public static List<Dados> lista = new ArrayList();
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getSobreNome() {
+        return sobreNome;
+    }
+
+    public void setSobreNome(String sobreNome) {
+        this.sobreNome = sobreNome;
+    }
+    
+}
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.liberato;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author Tati
+ */
+
+public class Gravar extends HttpServlet {
+    @Override
+    public void doGet(HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
+        PrintWriter out = response.getWriter();
+        response.setContentType("text/html");
+        String nome, sobreNome;
+        nome = request.getParameter("nome");
+        sobreNome = request.getParameter("sobrenome");
+        Dados novo = new Dados();
+        novo.setNome(nome);
+        novo.setSobreNome(sobreNome);
+        Dados.lista.add(novo);
+
+        out.println("<h1>Bem-vindo " + nome + " " + sobreNome
+                + "</h1>");
+        out.close();
+    }
+
+    public void doPost(HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
+        doGet(request, response);
+    }
+} 
+E depois bd corrigir importações.
+
+
+Listar colocar bootstrap
+package br.com.liberato;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author Tati
+ */
+
+public class Listar extends HttpServlet {
+     @Override
+    public void doGet(HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
+        PrintWriter out = response.getWriter();
+        response.setContentType("text/html");
+        out.print("<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css\" integrity=\"sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO\" crossorigin=\"anonymous\">");
+        out.print("<table class=\"table table-hover\">");
+        out.print("<tr><th>Nome</th>");
+        out.print("<th>Sobrenome</th></tr>");
+                
+        for(Dados novo:Dados.lista){
+            out.print("<tr><td>"+novo.getNome()+ "</td> " 
+                    +"<td>" + novo.getSobreNome()+"</td></tr>");
+           
+        }
+        out.print("</table>");
+        out.print("<br><br><a href='form.html'>Voltar</a>");
+        out.close();
+    }
+    public void doPost(HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
+        doGet(request,response);
+    }
+}
+WEB-INF → web.xml → <?xml version="1.0" encoding="UTF-8"?>, colocar abaixo 
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.1" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+<servlet>
+<servlet-name>Gravar</servlet-name>
+<servlet-class>br.com.liberato.Gravar</servlet-class>
+</servlet>
+<servlet>
+<servlet-name>Listar</servlet-name>
+<servlet-class>br.com.liberato.Listar</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>Gravar</servlet-name>
+<url-pattern>/gravar</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>Listar</servlet-name>
+<url-pattern>/listar</url-pattern>
+</servlet-mapping>
+<session-config>
+<session-timeout> 30 </session-timeout>
+</session-config>
+<welcome-file-list>
+<welcome-file>form.html</welcome-file>
+</welcome-file-list>
+</web-app>
+
+
+
+
+Glassfish-web.xml
+Servlets  → Adicionar elemento sevlet 
+Nome do servlet: listar
+Classe do servlet:br.com.liberato.Listar
+Padrão de URL:/listar
+
+
+
+
+
+
+
+form.html (após o meta bootstrap)
+
+Colocar entre o body
+
+<div class="container">
+            <form action="gravar" method="get">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" class="form-control" name="nome" 
+                           placeholder="Digite o nome">
+                </div>
+                <div class="form-group">
+                    <label for="sobrenome">Sobrenome</label>
+                    <input type="text" class="form-control" name="sobrenome" 
+                           placeholder="Digite o sobrenome">
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-success" value="Gravar">
+                    <input type="reset" class="btn btn-warning" value="Limpar">
+                </div>
+            </form>
+            <hr>
+            <a href="listar" class="btn btn-primary">Listar</a>
+        </div>
+<div class="container">
+            <form action="gravar" method="get">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" class="form-control" name="nome" 
+                           placeholder="Digite o nome">
+                </div>
+                <div class="form-group">
+                    <label for="sobrenome">Sobrenome</label>
+                    <input type="text" class="form-control" name="sobrenome" 
+                           placeholder="Digite o sobrenome">
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-success" value="Gravar">
+                    <input type="reset" class="btn btn-warning" value="Limpar">
+                </div>
+            </form>
+            <hr>
+            <a href="listar" class="btn btn-primary">Listar</a>
+        </div>
+<div class="container">
+
+
+
+Roda no html
