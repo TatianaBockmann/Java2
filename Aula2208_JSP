@@ -1,0 +1,101 @@
+
+Primeiro JSP
+Novo projeto → Java Web → Aplicação Web 
+
+Páginas Web → excluir index.html → bd Novo → JSP → nome do arquivo: index
+Rodar
+Páginas Web → Sobre o index.JSP bd → Exibir Servlet
+Index.jsp → dentro do body : 
+<body>
+        <%
+            String s = " <h2> Esse é um código JSP embebecido no HTML</h2>";
+                    out.write(s);
+                    %>
+    </body>
+
+Rodar → localhost;
+
+
+
+
+Atividade JSP Cálculo Salário Mensal
+
+Fazer um novo projeto, que contenha um formulário onde deve ser informado a quantidade de horas do mês, e o valor do salário hora. Utilizar Bootstrap e colocar imagem.
+Faça um jsp que calcule o valor do Salário Mensal multiplicando os 2 valores.
+Mostrar ao professor antes de postar na atividade.
+
+Novo projeto → Java Web → Aplicação Web 
+
+Colocar imagem
+Páginas Web → Novo →Pasta → img
+Pegar uma imagem copiar e colar na pasta.
+
+Páginas Web → Novo → JSP(calculo)
+Rodar
+Calculo.jsp → Exibir Servlet
+
+Calculo.jsp
+<%-- 
+    Document   : calculo
+    Created on : 02/09/2025, 13:30:37
+    Author     : Tati
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    double horas = Double.parseDouble(request.getParameter("horas"));
+    double valorHora = Double.parseDouble(request.getParameter("valorHora"));
+    double salario = horas * valorHora;
+%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Salario Mensal</title>
+    </head>
+    <body>
+        <div class="container">
+            <h2 class="text-center">Resultado do Cálculo</h2>
+            
+                Horas trabalhadas: <strong><%= horas%>h</strong><br>
+                Valor por hora: <strong>R$ <%= String.format("%.2f", valorHora)%></strong><br>
+                <span class="text-primary">Salário mensal: <strong>R$ <%= String.format("%.2f", salario)%></strong></span>
+            <a href="index.html" class="btn btn-secondary">Voltar</a>
+        </div>
+    </body>
+</html>
+
+Index.html
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+<title>TODO supply a title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+<h2 class="text-center">Cálculo de Salário Mensal</h2>
+
+<img src="img/salario.jpg" alt="Salário" class="img-fluid" style="max-height: 200px; display: block; margin: 20px auto;">
+
+<form action="calculo.jsp" method="post">
+<label for="horas" class="form-label">Quantidade de Horas no Mês:</label>
+<input type="number" class="form-control" id="horas" name="horas" required>
+
+<label for="valorHora" class="form-label">Valor do Salário por Hora (R$):</label>
+<input type="number" step="0.01" class="form-control" id="valorHora" name="valorHora" required>
+
+<button type="submit" class="btn btn-primary" style="margin-top: 15px;">Calcular Salário</button>
+</form>
+</div>
+</body>
+</html>
+
+
