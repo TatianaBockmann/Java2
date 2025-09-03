@@ -1,0 +1,55 @@
+
+
+Depois recreio
+Aula 22/08 Banco de dados 
+Java → Aplicação Java → Nome do projeto: JavaDB (tirar a classe principal)
+Pacotes de Códigos-fonte → Novo → Pacote → Java br.com.liberato → Nova classe: JavaDB
+
+public class JavaDB {
+     public static void main(String[] args) throws SQLException,
+            ClassNotFoundException {
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        String url = " jdbc:derby://localhost:1527/Java2025";
+        Connection con = DriverManager.getConnection(url,
+                "java", "java");
+        // faz a consulta no banco
+        java.sql.Statement declaracao = con.createStatement();
+        ResultSet login = declaracao.executeQuery(
+                "SELECT * FROM login");
+        while (login.next()) {
+            System.out.println(login.getString("login") + " - "
+                    + login.getString("senha"));
+        }
+        con.close();
+    }
+    
+}
+
+ Janela (barra superior) → Serviços → Bancos de Dados → (jdbc:derby://localhost:1527/Java2025 [java em JAVA] botão direito Propriedades → ...URL do Banco de Dados →colocar esse endereço na classe JavaDB
+Serviços → Bancos de Dados → Java DB → botão direito → Criar Banco de Dados, Nome: Java2025, Nome do Usuário: java, Senha:java
+(jdbc:derby://localhost:1527/Java2025 [java em JAVA] → bd Conectar
+
+
+Serviços → Tabelas → bd Executar Comando, colocar:
+Create table Login(
+ID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+login varchar(40),
+senha varchar(20)); e executar Arquivo.
+
+Serviços → JAVA → Tabelas →LOGIN → bd Exibir Dados → primeiro ícone da tabela: Inserir Registro.
+
+Serviços → jdbc:derby://localhost:1527/Java2025 [java em JAVA] → JAVA → Tabelas →LOGIN → bd Executar Comando... → SE HOUVER COMANDO.
+
+bd Executar Arquivo
+
+Serviços → JAVA → Tabelas →LOGIN → bd Obter Estrutura... → Salva LOGIN.grab
+
+Serviços → JAVA → Tabelas →LOGIN → bd Recriar Tabela... → 
+
+Projetos → Biblioteca → Adicionar Biblioteca → Drive do Java DB
+Na tela → botão direito → Corrigir importações
+
+
+
+Java DB → Iniciar servidor 
+jdbc:derby://localhost:1527/Java2025 [java em JAVA]  → bd conectar
