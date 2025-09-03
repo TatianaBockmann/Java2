@@ -1,0 +1,49 @@
+O que é um Servlet?
+Um Servlet é um código Java que roda no servidor e é usado para responder a requisições web — geralmente feitas por navegadores via HTTP.
+Ele é como o "cérebro" do seu sistema web: recebe dados de formulários, processa informações, acessa banco de dados, faz cálculos, e então gera uma resposta (normalmente HTML ou JSON).
+________________________________________
+🧠 O que ele faz?
+Um Servlet pode:
+•	Receber dados de um formulário HTML.
+•	Processar ou validar essas informações.
+•	Fazer cálculos (como o salário mensal que você está fazendo).
+•	Consultar ou salvar dados no banco de dados.
+•	Redirecionar para outra página (como um JSP com o resultado).
+•	Gerar uma resposta diretamente (como HTML ou JSON).
+________________________________________
+📌 Exemplo simples de uso:
+Você tem um formulário HTML que envia:
+<form action="CalculoServlet" method="post">
+    <!-- campos do formulário -->
+</form>
+E você tem um Servlet chamado CalculoServlet.java que faz:
+@WebServlet("/CalculoServlet")
+public class CalculoServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        double horas = Double.parseDouble(request.getParameter("horas"));
+        double valorHora = Double.parseDouble(request.getParameter("valorHora"));
+        double salario = horas * valorHora;
+
+        request.setAttribute("salario", salario);
+        request.getRequestDispatcher("resultado.jsp").forward(request, response);
+    }
+}
+________________________________________
+🆚 Diferença entre Servlet e JSP
+Servlet	JSP
+É Java puro	É HTML com Java embutido
+Mais usado para lógica	Mais usado para apresentação
+Mais difícil de escrever visualmente	Mais fácil para montar interfaces
+________________________________________
+🔁 Em resumo:
+•	Use Servlets para processar dados (lógica).
+•	Use JSPs para mostrar os dados (visão).
+________________________________________
+Se você está aprendendo agora, o fluxo ideal seria:
+1.	Formulário HTML ou JSP →
+2.	Envia para um Servlet →
+3.	O Servlet faz o cálculo →
+4.	Encaminha para um JSP para mostrar o resultado.
+
