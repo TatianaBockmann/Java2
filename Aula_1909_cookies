@@ -1,0 +1,218 @@
+
+
+Aula 19/09 Cookies
+Novo projeto → Java Web → Aplicação Web (Cookies) 
+Excluir index.html e criar index.jsp
+
+index.jsp
+
+<%-- 
+    Document   : index
+    Created on : 22/09/2025, 10:13:49
+    Author     : Tati
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+         <% String valor = "Testando o uso dos cookies";
+        String nomeCookie = "assinatura";
+        Cookie cookie = new Cookie(nomeCookie, valor);
+        cookie.setMaxAge(10); // 10 segundos
+        response.addCookie(cookie);
+        %>
+        <a href="recebido.jsp">Mostrar o conteúdo do Cookie</a>
+    </body>
+</html>
+recebido.jsp
+
+<%-- 
+    Document   : recebido
+    Created on : 22/09/2025, 10:15:13
+    Author     : Tati
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+          <% 
+           String cookieName = "assinatura";
+           Cookie cookies[] = request.getCookies();
+           Cookie cookieLido = null;
+           if (cookies != null){
+               for(int x = 0; x < cookies.length; x++){
+                   if (cookies[x].getName().equals(cookieName)){
+                       cookieLido = cookies[x];
+                       break;
+                    
+                   }
+               }
+           }
+        if (cookieLido == null){
+        %>
+        <h1>O cookie não existe mais!!!</h1>
+        <%} else {
+        %>
+        <%="conteudo do Cookie = "+ cookieLido.getValue()%>
+        <%}
+        %>
+    </body>
+</html>
+
+
+Seu código está correto e funcional para o que você está tentando fazer: criar um cookie em uma página JSP (index.jsp) e depois ler esse cookie em outra página JSP (recebido.jsp).
+Mas já que você mencionou no início Servlet + JSP, talvez queira usar essa lógica com um Servlet controlando a criação ou leitura dos cookies. Isso deixaria sua aplicação mais organizada, com a JSP sendo apenas a camada de visualização (e não contendo lógica Java diretamente).
+________________________________________
+🛠️ Melhorando com Servlet (Boas práticas)
+A lógica de criar ou ler cookies deveria estar no Servlet, e a JSP só mostra os dados.
+✅ 1. Servlet que cria o cookie
+// CriarCookieServlet.java
+@WebServlet("/criar-cookie")
+public class CriarCookieServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String valor = "Testando o uso dos cookies";
+        String nomeCookie = "assinatura";
+
+        Cookie cookie = new Cookie(nomeCookie, valor);
+        cookie.setMaxAge(10); // 10 segundos
+        response.addCookie(cookie);
+
+        // Redireciona para a página com o link
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.forward(request, response);
+    }
+}
+✅ 2. JSP (index.jsp) só com o link
+<!-- index.jsp -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cookie Criado</title>
+</head>
+<body>
+    <h1>Cookie criado com sucesso!</h1>
+    <a href="ler-cookie">Mostrar o conteúdo do Cookie</a>
+</body>
+</html>
+________________________________________
+✅ 3. Servlet que lê o cookie
+// LerCookieServlet.java
+@WebServlet("/ler-cookie")
+public class LerCookieServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String cookieName = "assinatura";
+        Cookie[] cookies = request.getCookies();
+        String valor = null;
+
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if (c.getName().equals(cookieName)) {
+                    valor = c.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (valor == null) {
+            request.setAttribute("mensagem", "O cookie não existe mais!!!");
+        } else {
+            request.setAttribute("mensagem", "Conteúdo do Cookie: " + valor);
+        }
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("recebido.jsp");
+        dispatcher.forward(request, response);
+    }
+}
+________________________________________
+✅ 4. JSP (recebido.jsp) exibe a mensagem
+<!-- recebido.jsp -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cookie Recebido</title>
+</head>
+<body>
+    <h1>${mensagem}</h1>
+</body>
+</html>
+________________________________________
+✅ Vantagens dessa abordagem
+•	Separação de responsabilidades: Servlet trata da lógica, JSP apenas exibe.
+•	Mais organizado e escalável.
+•	Evita scriptlets <% %>, que são considerados prática ultrapassada.
+
+
+🍪 O que são Cookies?
+Cookies são pequenos arquivos (ou pedaços de informação) que o servidor web envia para o navegador do cliente (usuário). Eles são armazenados localmente no navegador e enviados de volta ao servidor em todas as próximas requisições para aquele domínio.
+________________________________________
+🧠 Para que servem cookies?
+Cookies ajudam a manter informações entre requisições, como:
+•	Autenticação (login do usuário)
+•	Preferências do usuário (tema escuro/claro, idioma)
+•	Rastreamento de sessões ou carrinhos de compras
+•	Estatísticas e marketing (cookies de terceiros)
+________________________________________
+⚙️ Como os cookies funcionam (passo a passo)
+1.	O servidor cria um cookie e envia para o navegador do usuário.
+2.	O navegador salva o cookie.
+3.	Em cada nova requisição para aquele site, o navegador envia o cookie automaticamente.
+4.	O servidor pode ler o cookie e agir de acordo.
+________________________________________
+🍴 Exemplo no Java (Servlets ou JSP)
+Criando um cookie:
+Cookie cookie = new Cookie("nome", "João");
+cookie.setMaxAge(3600); // 1 hora
+response.addCookie(cookie);
+Isso envia o cookie para o navegador. setMaxAge() define o tempo de vida do cookie em segundos.
+________________________________________
+Lendo um cookie:
+Cookie[] cookies = request.getCookies();
+if (cookies != null) {
+    for (Cookie c : cookies) {
+        if (c.getName().equals("nome")) {
+            String valor = c.getValue();
+            // Agora você pode usar o valor
+        }
+    }
+}
+________________________________________
+⏱️ Tipos de cookies
+Tipo	Explicação
+Persistente	Tem setMaxAge, e fica salvo no disco do navegador. Sobrevive ao fechar o navegador.
+De sessão	Não tem setMaxAge, e só dura enquanto o navegador estiver aberto. É apagado ao fechar.
+________________________________________
+🚫 Limitações dos cookies
+•	Tamanho limitado (~4 KB por cookie).
+•	Número limitado por domínio (geralmente 20-50 cookies).
+•	Não são seguros para dados sensíveis, a menos que criptografados.
+•	Podem ser desativados pelo usuário.
+________________________________________
+🔐 Segurança
+•	Use o atributo HttpOnly para que o cookie não possa ser acessado por JavaScript (evita ataques XSS).
+•	Use o atributo Secure para que o cookie só seja enviado em conexões HTTPS.
+Cookie c = new Cookie("token", "abc123");
+c.setHttpOnly(true);
+c.setSecure(true);
+________________________________________
+✅ Quando usar cookies (boas práticas)
+Use cookies quando você precisa armazenar informações no navegador do cliente e não precisa de muito espaço ou segurança extrema.
+Para armazenar informações mais seguras ou maiores, prefira usar sessões no servidor (HttpSession).
+
