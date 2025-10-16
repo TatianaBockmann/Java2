@@ -1,110 +1,78 @@
-bd = botão direito
-Bootstrap: index e lista.jsp
-Aula 12/09 Banco de Dados em Java Web
 
 
-Mandar banco de dados junto com o programa:
-Janela → Serviços → (lado esquerdo) → Banco de Dados → JavaDB → Livraria1 → bd Propriedades → copiar localização banco de dados → explorador de arquivos, colar no início → zipa o banco de dados
-
-Novo projeto → Java Web → Aplicação Web (AtividadeBD) 
+Novo projeto → Java Web → Aplicação Web (ContatoDBCRUD) 
 OBS.: trocar UTF=8 para:windows-1252
+Obs.:  bootstrap: index, listaBD e alteraBD.
 
+Obs: Mandar banco de dados junto com o programa:
+Janela → Serviços → (lado esquerdo) → Banco de Dados → JavaDB → Java20253 → bd Propriedades → copiar localização banco de dados → explorador de arquivos, colar no início → zipa o banco de dados
 
-Janela → Serviços → (lado esquerdo) → Banco de Dados → JavaDB → criar banco de dados → Livraria, usuário java2 e senha java2 → conectar
-JAVA → Tabelas → bd Executar Comando...
+Janela → Serviços → (lado esquerdo) → Banco de Dados → JavaDB → criar banco de dados → Java20253, usuário java3 e senha java3 → conectar
+jdbc:derby://localhost:1527/Java20253 [java3 em JAVA3] → JAVA3 → Tabelas → bd Executar Comando...
 
-create table livros(
+create table contatos (
+
 id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-titulo VARCHAR(50),
-paginas int,
-editora VARCHAR(50),
-autor VARCHAR(50),
-genero VARCHAR(50),
-resumo VARCHAR(50),
-estoque int,
-preco decimal(10,2));
+
+nome VARCHAR(255),
+
+email VARCHAR(255),
+
+endereco VARCHAR(255),
+
+dataNascimento DATE);
 
 bd na tela → Executar Instrução
 
 Páginas Web → Novo → Pasta → imagens → cola imagem
 
+•  inserir() → grava
+•  listar() → lista (index)
+•  atualizar() → altera (alteraBD formulário, altera código)
+•  excluir() → exclui
 
 OBS.: trocar UTF=8 para:windows-1252
-Index.html
-
-
-
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+Index.html (Formulário)
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<title>Segundo Formulário</title>
+<title>Primeiro Formulário</title>
 </head>
 <body>
 <div class="container">
-<h1> Cadastro de Livros</h1>
+<h1> Cadastro de Contatos</h1>
 <br>
 <br>
 <form class="form-horizontal" name="Formulario" action="gravaBD.jsp" method="post">
 <div class="form-group">
-<label class="col-sm-2 control-label">Título: </label>
+<label class="col-sm-2 control-label">Nome: </label>
 <div class="col-sm-8">
-<input class="form-control" type="text" name="titulo" required/> 
+<input class="form-control" type="text" name="nome" required/> 
 </div>
 </div>
 
 <div class="form-group">
-<label class="col-sm-2 control-label">Páginas: </label>
+<label class="col-sm-2 control-label">E-mail: </label>
 <div class="col-sm-8">
-<input class="form-control" type="text" name="paginas" /> 
+<input class="form-control" type="text" name="email" /> 
 </div>
 </div>
 
 <div class="form-group">
-<label class="col-sm-2 control-label">Editora: </label>
+<label class="col-sm-2 control-label">Endereço: </label>
 <div class="col-sm-8">
-<input class="form-control" type="text" name="editora" /> 
+<input class="form-control" type="text" name="endereco" /> 
 </div>
 </div>
 
 
 <div class="form-group">
-<label class="col-sm-2 control-label">Autor: </label>
+<label class="col-sm-2 control-label">Data Nascimento: </label>
 <div class="col-sm-8">
-<input class="form-control" type="text" name="autor" /> 
-</div>
-</div>
-<div class="form-group">
-<label class="col-sm-2 control-label">Gênero: </label>
-<div class="col-sm-8">
-<input class="form-control" type="text" name="genero" /> 
-</div>
-</div>
-<div class="form-group">
-<label class="col-sm-2 control-label">Resumo: </label>
-<div class="col-sm-8">
-<input class="form-control" type="text" name="resumo" /> 
-</div>
-</div>
-<div class="form-group">
-<label class="col-sm-2 control-label">Estoque: </label>
-<div class="col-sm-8">
-<input class="form-control" type="text" name="estoque" /> 
-</div>
-</div>
-<div class="form-group">
-<label class="col-sm-2 control-label">Preço: </label>
-<div class="col-sm-8">
-<input class="form-control" type="text" name="preco" /> 
+<input class="form-control" type="text" name="dtNasc" /> 
 </div>
 </div>
 
@@ -120,7 +88,7 @@ Formulario.reset();"/>
 </form>
 <div class="form-group">
 <div class="col-sm-offset-3 col-sm-10">
-<a class="btn btn-default" href="listaBD.jsp" role="button">Listar os Livros em Tabela</a>
+<a class="btn btn-default" href="listaBD.jsp" role="button">Listar os Contatos em Tabela</a>
 </div>
 </div>
 </div>
@@ -129,130 +97,75 @@ Formulario.reset();"/>
 
 
 
-
-Páginas Web →  bd Novo → JSP → nome do arquivo: gravaBD
-Rodar
-Páginas Web → Sobre o gravaBD.JSP bd → Exibir Servlet
-gravaBD.jsp
-<%-- 
-    Document   : gravaBd
-    Created on : 19/09/2025, 13:42:45
-    Author     : Tati
---%>
-
-<%@page import="java.math.BigDecimal"%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.util.Calendar"%>
-<%@page import="java.text.ParseException"%>
-<%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
+gravaBD.JSP
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-        <%
-       //buscando os par?metros no request
-       String titulo = request.getParameter("titulo");
-       String paginas = request.getParameter("paginas");
-       String editora = request.getParameter("editora");
-       String autor = request.getParameter("autor");
-       String genero = request.getParameter("genero");
-       String resumo = request.getParameter("resumo");
-       String estoque = request.getParameter("estoque");
-       String preco = request.getParameter("preco");
-       
-     // convers?o de tipos
-int numPaginas = Integer.parseInt(paginas);
-int qtdEstoque = Integer.parseInt(estoque);
-BigDecimal valorPreco = BigDecimal.ZERO;
+ <%
+   // buscando os par�metros no request
+    String nome = request.getParameter("nome");
+    String endereco = request.getParameter("endereco");
+    String email = request.getParameter("email");
+    String dataEmTexto = request.getParameter("dtNasc");
+    Calendar dataNascimento = null;
 
-try {
-    numPaginas = Integer.parseInt(paginas);
-    qtdEstoque = Integer.parseInt(estoque);
-    valorPreco = new BigDecimal(preco.replace(",", ".")); // troca vírgula por ponto
-} catch (NumberFormatException e) {
+    // fazendo a convers�o da data
+    try {
+        SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyyy");
+        data.setLenient(false);
+        Date date = data.parse(dataEmTexto);
+        dataNascimento = Calendar.getInstance();
+        dataNascimento.setTime(date);
+    } catch (ParseException e) {
 %>
-    <p>Erro ao converter número: <%= e.getMessage() %></p>
-    <a href="javascript:history.back()">&lt;&lt; Voltar</a>
+<html>
+    <body>
+        Erro de convers�o da data
+        <br><br>
+        <a href=javascript:history.back()> &lt;&lt; Voltar </a>
+    </body>
+</html>
 <%
-    return;
-}
-//conectando
+        return; //para a execu��o do m�todo
+    }
+    // conectando
     Class.forName("org.apache.derby.jdbc.ClientDriver");
-    String url = "jdbc:derby://localhost:1527/Livraria1";
-    Connection con = DriverManager.getConnection(url,"java2", "java2");
-    //cria um preparedStatement
-    String sql = "insert into livros" + "(titulo, paginas, editora, autor, genero, resumo, estoque, preco)"
-        + "values (?,?,?,?,?,?,?,?)";
-    try{
-        //prepared statement para inserão
+    String url = "jdbc:derby://localhost:1527/Java20253";
+    Connection con = DriverManager.getConnection(url, "java3", "java3");
+    // cria um preparedStatement
+    String sql = "insert into contatos"
+            + " (nome,email,endereco,dataNascimento)"
+            + " values (?,?,?,?)";
+    try {
+        // prepared statement para inser��o
         PreparedStatement stmt = con.prepareStatement(sql);
-        //seta os valores
-        stmt.setString(1,titulo);
-        stmt.setInt(2,numPaginas);
-        stmt.setString(3,editora);
-        stmt.setString(4,autor);
-        stmt.setString(5,genero);
-        stmt.setString(6,resumo);
-        stmt.setInt(7,qtdEstoque);
-        stmt.setString(8,preco);
-        
-        //executa
+        // seta os valores
+        stmt.setString(1, nome);
+        stmt.setString(2, email);
+        stmt.setString(3, endereco);
+   stmt.setDate(4, new java.sql.Date(dataNascimento.getTimeInMillis()));
+        // executa
         stmt.execute();
         stmt.close();
-    }catch (SQLException e){
+    } catch (SQLException e) {
         throw new RuntimeException(e);
-
-        }
+    }
 %>
 <html>
     <head>
-        <title>Livros</title>
+        <title>Contatos</title>
     </head>
-</body>
-
-    <h1>Livro <%=titulo%> Inserido com Sucesso!</h1>
-    <br><br>
-
-<a href="http://localhost:8080/AtividadeBD/">
-    <button style="background-color: #007BFF; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer;">
-        &#8592; Voltar para o Início
-    </button>
-</a>
-
-<a href="listaBD.jsp">
-    <button style="background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer;">
-        Ver Lista de Livros
-    </button>
-</a>
-        
+    <body>
+        <h1>Contato <%=nome%> Inserido com Sucesso! </h1>
+        <br><br><br>
     </body>
 </html>
 
-Serviços → JAVA2 → Tabelas → LIVROS → bd Exibir Dados
 
-
-Páginas Web →  bd Novo → JSP → nome do arquivo: listaBD
-Rodar
-Páginas Web → Sobre o listaBD.JSP bd → Exibir Servlet
 
 listaBD.jsp
-
-<%-- 
-    Document   : listaBD
-    Created on : 19/09/2025, 14:32:27
-    Author     : Tati
---%>
-
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
 <html>
@@ -260,43 +173,35 @@ listaBD.jsp
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <title>Lista de Livros</title>
+        <title>Lista de Contatos</title>
         <%
             // conectando
             Class.forName("org.apache.derby.jdbc.ClientDriver");
-            String url = "jdbc:derby://localhost:1527/Livraria1";
-            Connection con = DriverManager.getConnection(url, "java2", "java2");
+            String url = "jdbc:derby://localhost:1527/Java20253";
+            Connection con = DriverManager.getConnection(url, "java3", "java3");
         %>
     </head>
     <body>
         <%      try {
                 java.sql.Statement statement = con.createStatement();
                 ResultSet resultados = 
-                        statement.executeQuery("SELECT * FROM Livros");
+                        statement.executeQuery("SELECT * FROM Contatos");
         %>
         <table class="table table-striped" >
-            <tr><th>Título</th>
-                <th>Páginas</th>
-                <th>Editora</th>
-                <th>Autor</th>
-                <th>Gênero</th>
-                <th>Resumo</th>
-                <th>Estoque</th>
-                <th>Preço</th>
+            <tr><th>Nome</th>
+                <th>Endere�o</th>
+                <th>E-mail</th>
+                <th>Dt.Nasc.</th>
                 <th>Alterar</th>
                 <th>Excluir</th>
             </tr>
                     <% while (resultados.next()) {%>
             <tr>
-                <td><%=resultados.getString("titulo")%></td>
-                <td><%=resultados.getString("paginas")%></td>
-                <td><%=resultados.getString("editora")%></td>
-                <td><%=resultados.getString("autor")%></td>
-                <td><%=resultados.getString("genero")%></td>
-                <td><%=resultados.getString("resumo")%></td>
-                <td><%=resultados.getString("estoque")%></td>
-                <td><%=resultados.getString("preco")%></td>
-                
+                <td><%=resultados.getString("nome")%></td>
+                <td><%=resultados.getString("endereco")%></td>
+                <td><%=resultados.getString("email")%></td>
+                <td><%=new SimpleDateFormat
+        ("dd/MM/yyyy").format(resultados.getDate("dataNascimento"))%></td>
                 <td align="center"><a 
                         href="alteraBD.jsp?id=<%=resultados.getInt("id")%>">
                         <img src="imagens/ticado.jpg" ></a></td>
@@ -311,34 +216,13 @@ listaBD.jsp
                 }
             %>
         </table>
-        <br><br>
-
-<a href="http://localhost:8080/AtividadeBD/">
-    <button style="background-color: #007BFF; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer;">
-        &#8592; Voltar para o Início
-    </button>
-</a>
     </body>
 </html>
 
-Páginas Web →  bd Novo → JSP → nome do arquivo: alteraBD
-Rodar
-Páginas Web → Sobre o alteraBD.JSP bd → Exibir Servlet
 
-alteraBD
-<%-- 
-    Document   : alteraBD
-    Created on : 19/09/2025, 14:45:42
-    Author     : Tati
---%>
 
-<%@page import="java.sql.SQLException"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+alteraBD.jsp
+<%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -350,83 +234,56 @@ alteraBD
         <%
             // conectando
             Class.forName("org.apache.derby.jdbc.ClientDriver");
-            String url = "jdbc:derby://localhost:1527/Livraria1";
-            Connection con = DriverManager.getConnection(url, "java2", "java2");
+            String url = "jdbc:derby://localhost:1527/Java2025";
+            Connection con = DriverManager.getConnection(url, "java", "java");
         %>
     </head>
     <body> 
         <div class="container">
-            <h1>Alteração de Livros</h1>
+            <h1> Alteração de Contatos</h1>
             <br>
             <br>
             <%
                 int id = Integer.parseInt(request.getParameter("id"));
                 try {
                     PreparedStatement ps = con.prepareStatement(
-                            "SELECT * FROM Livros where id=?");
+                            "SELECT * FROM Contatos where id=?");
                     ps.setInt(1, id);
                     ResultSet resultados = ps.executeQuery();
                     resultados.next();%>
             <form class="form-horizontal" name="Formulario" action="altera.jsp" method="get">
                 <div class="form-group">
-                    <label  class="col-sm-2 control-label">Título: </label>
+                    <label  class="col-sm-2 control-label">Nome: </label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="text" name="titulo" 
-                               value="<%=resultados.getString("titulo")%>"/> 
+                        <input class="form-control" type="text" name="nome" 
+                               value="<%=resultados.getString("nome")%>"/> 
                     </div>
                 </div>
                 <input type="hidden" name="id" 
                        value="<%=resultados.getInt("id")%>"/>    
 
                 <div class="form-group">
-                    <label  class="col-sm-2 control-label">Páginas: </label>
+                    <label  class="col-sm-2 control-label">E-mail: </label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="text" name="paginas" 
-                               value="<%=resultados.getString("paginas")%>"/> 
+                        <input class="form-control" type="text" name="email" 
+                               value="<%=resultados.getString("email")%>"/> 
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label  class="col-sm-2 control-label">Editora: </label>
+                    <label  class="col-sm-2 control-label">Endereço: </label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="text" name="editora" 
-                               value="<%=resultados.getString("editora")%>"/>  
+                        <input class="form-control" type="text" name="endereco" 
+                               value="<%=resultados.getString("endereco")%>"/>  
                     </div>
                 </div>
 
                     <div class="form-group">
-                    <label  class="col-sm-2 control-label">Autor: </label>
+                    <label  class="col-sm-2 control-label">Data Nascimento: </label>
                     <div class="col-sm-8">
-                        <input class="form-control" type="text" name="autor" 
-                               value="<%=resultados.getString("autor")%>"/>  
-                    </div>
-                </div>
-                    <div class="form-group">
-                    <label  class="col-sm-2 control-label">Gênero: </label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="text" name="genero" 
-                               value="<%=resultados.getString("genero")%>"/>  
-                    </div>
-                </div>
-                    <div class="form-group">
-                    <label  class="col-sm-2 control-label">Resumo: </label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="text" name="resumo" 
-                               value="<%=resultados.getString("resumo")%>"/>  
-                    </div>
-                </div>
-                    <div class="form-group">
-                    <label  class="col-sm-2 control-label">Estoque: </label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="text" name="estoque" 
-                               value="<%=resultados.getString("estoque")%>"/>  
-                    </div>
-                </div>
-                    <div class="form-group">
-                    <label  class="col-sm-2 control-label">Preço: </label>
-                    <div class="col-sm-8">
-                        <input class="form-control" type="text" name="preco" 
-                               value="<%=resultados.getString("preco")%>"/>  
+                        <input  class="form-control" type="text" name="dtNasc" 
+                                value="<%=new 
+    SimpleDateFormat("dd/MM/yyyy").format(resultados.getDate("dataNascimento"))%>"/> 
                     </div>
                 </div>
 
@@ -446,84 +303,68 @@ alteraBD
             %>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-10">
-                    <a class="btn btn-default" href="listaBD.jsp" role="button">Listar os Livros em Tabela</a>
+                    <a class="btn btn-default" href="listaBD.jsp" role="button">Listar os Contatos em Tabela</a>
                 </div>
             </div>
         </div>
     </body>
 </html>
 
-Páginas Web →  bd Novo → JSP → nome do arquivo: altera
-Rodar
-Páginas Web → Sobre o altera.JSP bd → Exibir Servlet
 
-altera
-<%-- 
-    Document   : altera
-    Created on : 19/09/2025, 15:04:09
-    Author     : Tati
---%>
 
-<%@page import="java.math.BigDecimal"%>
-<%@page import="java.sql.DriverManager"%>
+
+altera.jsp
 <%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.Connection"%>
-<%@page import="java.text.ParseException"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.Calendar"%>
+<%@page import="java.sql.Connection"%>
 <%
-    // buscando os par?metros no request
+    // buscando os par�metros no request
     int id = Integer.parseInt(request.getParameter("id"));
-    String titulo = request.getParameter("titulo");
-    String paginas = request.getParameter("paginas");
-    String editora = request.getParameter("editora");
-    String autor = request.getParameter("autor");
-    String genero = request.getParameter("genero");
-    String resumo = request.getParameter("resumo");
-    String estoque = request.getParameter("estoque");
-    String preco = request.getParameter("preco");
-    
-    // convers?o de tipos
-int numPaginas = Integer.parseInt(paginas);
-int qtdEstoque = Integer.parseInt(estoque);
-BigDecimal valorPreco = BigDecimal.ZERO;
+    String nome = request.getParameter("nome");
+    String endereco = request.getParameter("endereco");
+    String email = request.getParameter("email");
+    String dataEmTexto = request.getParameter("dtNasc");
+    Calendar dataNascimento = null;
 
-try {
-    numPaginas = Integer.parseInt(paginas);
-    qtdEstoque = Integer.parseInt(estoque);
-    valorPreco = new BigDecimal(preco.replace(",", ".")); // troca vírgula por ponto
-} catch (NumberFormatException e) {
+    // fazendo a convers�o da data
+    try {
+        SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyyy");
+        data.setLenient(false);
+        Date date = data.parse(dataEmTexto);
+        dataNascimento = Calendar.getInstance();
+        dataNascimento.setTime(date);
+    } catch (ParseException e) {
 %>
-    <p>Erro ao converter número: <%= e.getMessage() %></p>
-    <a href="javascript:history.back()">&lt;&lt; Voltar</a>
+<html>
+    <body>
+        Erro de convers�o da data
+        <br><br>
+        <a href=javascript:history.back()> &lt;&lt; Voltar </a>
+    </body>
+</html>
 <%
-        return; //para a execu??o do m?todo
+        return; //para a execu��o do m�todo
     }
-    //conectando
+    // conectando
     Class.forName("org.apache.derby.jdbc.ClientDriver");
-    String url = "jdbc:derby://localhost:1527/Livraria1";
-    Connection con = DriverManager.getConnection(url,"java2", "java2");
+    String url = "jdbc:derby://localhost:1527/Java20253";
+    Connection con = DriverManager.getConnection(url, "java3", "java3");
 
     // cria um preparedStatement
-    String sql = "update livros"
-            + "  set titulo=?,paginas=?,editora=?,autor=?,genero=?,resumo=?,estoque=?,preco=?"
+    String sql = "update contatos"
+            + "  set nome=?,email=?,endereco=?,dataNascimento=?"
             + " where id=?";
     try {
-        // prepared statement para inser??o
+        // prepared statement para inser��o
         PreparedStatement stmt = con.prepareStatement(sql);
-  
-        //seta os valores
-        stmt.setString(1,titulo);
-        stmt.setInt(2,numPaginas);
-        stmt.setString(3,editora);
-        stmt.setString(4,autor);
-        stmt.setString(5,genero);
-        stmt.setString(6,resumo);
-        stmt.setInt(7,qtdEstoque);
-        stmt.setBigDecimal(8, valorPreco);
-        stmt.setInt(9, id);
-
+        // seta os valores
+        stmt.setString(1, nome);
+        stmt.setString(2, email);
+        stmt.setString(3, endereco);
+        stmt.setDate(4, new java.sql.Date(dataNascimento.getTimeInMillis()));
+        stmt.setInt(5, id);
         // executa
         stmt.execute();
         stmt.close();
@@ -533,18 +374,11 @@ try {
     response.sendRedirect("listaBD.jsp");
 %>
 
-Páginas Web →  bd Novo → JSP → nome do arquivo: excluiBD
-Rodar
-Páginas Web → Sobre o excluiBD.JSP bd → Exibir Servlet
 
-excluiBD
-<%-- 
-    Document   : excluiBD
-    Created on : 19/09/2025, 15:35:25
-    Author     : Tati
---%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+excluiBD.jsp
+<%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -554,7 +388,7 @@ excluiBD
     <body>
         <% int id = Integer.parseInt(request.getParameter("id"));%>
         <script>
-            if (confirm("Tem certeza que deseja excluir livro ?")) {
+            if (confirm("Tem certeza que deseja excluir contato ?")) {
                 window.location = "exclui.jsp?id=<%=id%>";
             } else { 
                 window.location = "listaBD.jsp";
@@ -563,34 +397,20 @@ excluiBD
     </body>
 </html>
 
-Páginas Web →  bd Novo → JSP → nome do arquivo: exclui
-Rodar
-Páginas Web → Sobre o exclui.JSP bd → Exibir Servlet
-
-exclui
-<%-- 
-    Document   : exclui
-    Created on : 19/09/2025, 15:35:57
-    Author     : Tati
---%>
-
-<%@page import="java.sql.SQLException"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+exclui.jsp	
+%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
 <%
 // buscando os parâmetros no request
     int id = Integer.parseInt(request.getParameter("id"));
     // conectando
     Class.forName("org.apache.derby.jdbc.ClientDriver");
-    String url = "jdbc:derby://localhost:1527/Livraria1";
-    Connection con = DriverManager.getConnection(url,"java2", "java2");
+    String url = "jdbc:derby://localhost:1527/Java20253";
+    Connection con = DriverManager.getConnection(url, "java3", "java3");
 
     try {
         PreparedStatement ps = con.prepareStatement(
-                "delete from Livros where id=?");
+                "delete from Contatos where id=?");
         ps.setInt(1, id);
         ps.execute();
     } catch (SQLException e) {
@@ -598,26 +418,3 @@ exclui
     }
     response.sendRedirect("listaBD.jsp");
 %>
-
-Não, você não pode usar BigDecimal = 0; diretamente em Java. Isso causaria erro de compilação.
-________________________________________
-❌ Errado:
-BigDecimal valorPreco = 0; // Erro! Tipos incompatíveis: int não pode ser convertido para BigDecimal
-✅ Certo:
-Você deve criar um BigDecimal a partir de um valor numérico ou string:
-BigDecimal valorPreco = BigDecimal.ZERO; // forma recomendada e clara
-ou:
-BigDecimal valorPreco = new BigDecimal("0");  // também válido, mas menos direto
-ou ainda:
-BigDecimal valorPreco = BigDecimal.valueOf(0); // alternativa segura
-________________________________________
-⚠️ Por que não usar BigDecimal valorPreco = 0;?
-Porque 0 é um literal do tipo int, e o Java não faz conversão automática de int para BigDecimal. O compilador exige que você use um construtor ou método estático para criar uma instância de BigDecimal.
-________________________________________
-✅ Resumo:
-Use sempre uma destas formas:
-BigDecimal valor = BigDecimal.ZERO;
-BigDecimal valor = new BigDecimal("0");
-BigDecimal valor = BigDecimal.valueOf(0);
-Todas são corretas, mas BigDecimal.ZERO é a forma mais clara e eficiente.
-
