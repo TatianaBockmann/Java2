@@ -1,1 +1,126 @@
+Criar um programa que verifique no index, se existem informações no Cookies sobre cor de fundo e cor da fonte, caso haja mostrar a saudação Bem Vindo com as letras na cor de fonte e cor de fundo anteriormente escolhidas. 
+Se não houver, mandar para uma pagina onde será escolhida a cor da fonte e cor de fundo e gravada em um cookie, e mostrada a saudação Bem Vindo com as letras na cor de fonte e cor de fundo escolhidas.
+As cores são:  Amarelo, Azul, Vermelho, Verde, Branco e Preto
+
+
+Dica para personalização:
+
+
+  <style>
+            body{background-color:<%=cookieFundo.getValue()%>}
+            h1{color:<%=cookieFonte.getValue()%>}
+</style>
+
+
+
+Novo projeto → Java Web → Aplicação Web (CookieLogin1) 
+Colocar logotipo Liberato na pasta imagens.
+<%-- 
+    Document   : login
+    Created on : 02/10/2025, 20:52:49
+    Author     : Tati
+--%>
+
+<%@page contentType="text/html" pageEncoding="WINDOWS-1252"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"><!--Garante compatibilidade com o navegador (especialmente o Internet Explorer)-->
+        <meta name="viewport" content="width=device-width, initial-scale=1"><!--Define que a página é responsiva (se adapta a celulares, tablets, etc.)-->
+        <meta http-equiv="Content-Type" content="text/html; charset=WINDOWS-1252"><!--Define a codificação de caracteres WINDOWS-1252-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"><!--Carrega o Bootstrap 4.1.3, que é uma biblioteca CSS para facilitar o design e layout responsivo-->
+        <title>Entrada de Usuário</title><!--título da aba-->
+    </head>
+    <body>
+        <div class="container"><!--Centraliza o conteúdo com margens e responsividade, usando a classe container do Bootstrap-->        
+            <img src="imagens/logo.jpg"  alt ="Logomarca da Liberato">
+            <br><br>
+            <form class="form-horizontal" action="incluiCookie.jsp" method="get"><!--Classe form-horizontal para melhor layout no Bootstrap.Quando o formulário for enviado, os dados vão para incluiCookie.jsp via método GET-->
+                <div class="form-group">
+                    <label  class="col-sm-2 control-label">Usuário:</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" required="required" 
+                        placeholder="Digite aqui o seu nome" type="text" name="nome"/><!--Nome do campo: nome (vai ser capturado por request.getParameter("nome") na JSP)-->
+                    </div>
+                </div>    
+                <div class="form-group">
+                    <label  class="col-sm-2 control-label">Senha:</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" required="required" 
+                      placeholder="Digite aqui a sua senha" type="password" name="senha"/><!--ampo de senha, com ocultação dos caracteres.Nome do campo: senha-->
+                    </div> 
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input class="btn btn-success" type="submit" value="Logar" /><!--Um botão estilizado com btn btn-success (verde).Ao clicar, o formulário é enviado.-->  
+                    </div>
+                </div>                         
+            </form>
+        </div>
+    </body>
+</html>
+
+
+<%-- 
+    Document   : index
+    Created on : 02/10/2025, 20:27:47
+    Author     : Tati
+--%>
+
+<%@page contentType="text/html" pageEncoding="WINDOWS-1252"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=WINDOWS-1252">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        
+        <%
+            //código Java no servidor
+            Cookie cookies[] = request.getCookies();// Obtém todos os cookies enviados pelo navegador
+            Cookie cookieLido = null;// Inicializa uma variável para armazenar o cookie "login"
+            if (cookies != null){
+                for (int x = 0; x < cookies.length; x++){
+                    if (cookies[x].getName().equals("login")){// Verifica se existe um cookie chamado "login"
+                        cookieLido = cookies[x];// Se encontrar, armazena em cookieLido
+                        break;// Para o loop
+                    }
+                }
+                //Esse trecho procura por um cookie chamado "login". Se encontrar, o armazena na variável cookieLido.
+            }
+            if (cookieLido == null){
+                response.sendRedirect("login.jsp");// Se o cookie não for encontrado, redireciona para a página de login
+            } else {
+            %>
+            <h1>Bem Vindo <%=cookieLido.getValue()%>!</h1><!-- Se o cookie existir, mostra a mensagem de boas-vindas com o valor do cookie -->
+            <%}%>
+    </body>
+</html>
+
+
+<%-- 
+    Document   : incluiCookie
+    Created on : 02/10/2025, 20:44:34
+    Author     : Tati
+--%>
+
+<%@page contentType="text/html" pageEncoding="WINDOWS-1252"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=WINDOWS-1252">
+        <title>JSP Page</title>
+    </head>
+    <body>
+         <%
+            String valor = request.getParameter("nome");//Pega o nome enviado no formulário
+            String nomeCookie = "login"; //O cookie será chamado "login" — um identificador para guardar o nome do usuário
+            Cookie cookie = new Cookie(nomeCookie, valor); //Nome: "login" Valor: o nome digitado pelo usuário (ex: "Maria")
+            cookie.setMaxAge(60); //tempo em segundos
+            response.addCookie(cookie);//Envia o cookie para o navegador junto com a resposta da página.O navegador vai armazenar o cookie e enviá-lo de volta nas próximas requisições.
+            %>
+            <h1>Bem Vindo <%=valor%>!</h1> <!--Exibe mensagem de boas-vindas-->
+    </body>
+</html>
 
