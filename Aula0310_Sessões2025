@@ -1,0 +1,68 @@
+index.jsp
+<%-- 
+    Document   : index
+    Created on : 17/10/2025, 09:32:48
+    Author     : Tati
+--%>
+
+<%@page import="java.util.Date"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <%
+            out.println("Dados da Sessão <br>");
+            out.println("Identificador: " + session.getId() + "<br>");
+            out.println("Data Criação: " + 
+                    new Date(session.getCreationTime()) + "<br>");
+            out.println("Último Acesso: " +
+                    new Date(session.getLastAccessedTime()) + "<br>");
+            out.println("Tempo Máximo de Inatividade : " 
+                    + session.getMaxInactiveInterval()
+                    + " segundos =  " + 
+                    (session.getMaxInactiveInterval() / 60)
+                    + " minutos <br>");
+        %>
+        <br><br>
+        <!--Outra maneira-->
+        Dados da Sessão <br>
+        Identificador: <%=session.getId()%><br>
+        Data Criação: <%=new Date(session.getCreationTime())%> <br>
+        Último Acesso: <%=new Date(session.getLastAccessedTime())%><br>
+        Tempo Máximo de Inatividade : <%=session.getMaxInactiveInterval()%>
+        segundos =  <%=(session.getMaxInactiveInterval() / 60)%> minutos <br>
+    </body>
+</html>
+
+
+<%-- 
+    Document   : contador
+    Created on : 17/10/2025, 09:35:05
+    Author     : Tati
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%
+// Etapa 1: Obter o objeto Session
+       session = request.getSession(true);
+ 
+   // Etapa 2: Obter valor de dados da sessão
+      Integer numero = (Integer) session.getAttribute("contadorSessao"); 
+      if (numero == null) numero = 1;         
+      else numero = numero + 1;         
+      session.setAttribute ("contadorSessao", numero); 
+
+   // Etapa 3: Emitir a página%>
+      <html>  
+      <head><title>Teste de Sessão</title></head>
+      <body>
+      <h1>Teste de Sessão</h1>
+      Você clicou nesta página  <%=numero%> vezes <br>
+      Sua sessão : <%=request.getHeader("Cookie")%>
+      </body></html>    
+      <%session.setMaxInactiveInterval(10);%>
